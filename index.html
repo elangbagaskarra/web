@@ -6,11 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Responsive Portfolio Website Design</title>
     <link rel="stylesheet" href="style.css">
-    <!----Font awesome cdn  font icon css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
 </head>
 <body>
-     <div class="hero-header">
+    <div class="hero-header">
         <div class="wrapper">
             <header>
                 <div class="logo">
@@ -33,20 +35,20 @@
                 </nav>
             </header>
             <div class="container">
-                 <div class="hero-pic">
+                <div class="hero-pic">
                     <img src="images/main_photo.jpg" alt="profile pic">
-                 </div>
-                 <div class="hero-text">
+                </div>
+                <div class="hero-text">
                     <h5>Hi I'm <span class="input">Frontend Developer</span></h5>
                     <h1>Elang Bagaskarra</h1>
-                    <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Soluta delectus dolorum 
-                        quibusdam maiores magni quod rem in porro, laborum, laudantium ex repellendus explicabo, 
-                        autem molestiae!
-                    </p>
+                    <p>Hi, saya Elang Bagaskarra! Saya suka mengembangkan aplikasi web dan mobile yang keren dan bermanfaat. Berbekal Flutter, JavaScript, dan teknologi lainnya, saya terus belajar hal baru setiap hari. Saya juga tertarik dengan machine learning dan ingin membuat sesuatu yang bisa membawa dampak positif bagi banyak orang.</p>
+
+                         </p>
+
 
                     <div class="btn-group">
-                       <a href="#" class="btn active">Download CV</a>
-                       <a href="#" class="btn">Contact</a>
+                        <a href="#" class="btn active">Download CV</a>
+                        <a href="#" class="btn">Contact</a>
                     </div>
 
                     <div class="social">
@@ -56,29 +58,77 @@
                         <a href="#"><i class="fa-brands fa-dribbble"></i></a>
                         <a href="#"><i class="fa-brands fa-pintrest"></i></a>
                     </div>
-                 </div>
+                </div>
             </div>
         </div>
-     </div>
-     <!---typed js for typing text effect-->
-     <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.10/typed.min.js"></script>
-     <script>
-        /** creating button click show hide navbar **/
-        var togglebtn=document.querySelector(".togglebtn");
-        var nav=document.querySelector(".navlinks");
-        var links=document.querySelector(".navlinks li");
+    </div>
+
+    <div class="portfolio" id="portfolio">
+        <h2>My Projects</h2>
+        <div class="project-container" id="project-container">
+            <!-- Projects will be displayed here -->
+        </div>
+    </div>
+
+    <!-- Firebase Configuration -->
+    <script>
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+  apiKey: "AIzaSyApflalqeqB3VdjCPLWIO8ZboBg0VmaU_A",
+  authDomain: "porto-c7c88.firebaseapp.com",
+  projectId: "porto-c7c88",
+  storageBucket: "porto-c7c88.appspot.com",
+  messagingSenderId: "429180119765",
+  appId: "1:429180119765:web:aa970cf06946757ad9105c",
+  measurementId: "G-H05MTWD9CD"
+};
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        // Fetch and display projects
+        function fetchProjects() {
+            const projectsRef = database.ref('projects');
+            projectsRef.on('value', (snapshot) => {
+                const projects = snapshot.val();
+                const projectContainer = document.getElementById('project-container');
+                projectContainer.innerHTML = ''; // Clear previous entries
+
+                for (let id in projects) {
+                    const project = projects[id];
+                    projectContainer.innerHTML += `
+                        <div class="project">
+                            <img src="${project.photo}" alt="${project.name}">
+                            <h3>${project.name}</h3>
+                            <p>Date: ${project.date}</p>
+                            <p>${project.description}</p>
+                            <a href="${project.githubLink}" target="_blank">View on GitHub</a>
+                        </div>
+                    `;
+                }
+            });
+        }
+
+        // Call the fetchProjects function when the page loads
+        window.onload = fetchProjects;
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.10/typed.min.js"></script>
+    <script>
+        var togglebtn = document.querySelector(".togglebtn");
+        var nav = document.querySelector(".navlinks");
 
         togglebtn.addEventListener("click", function(){
             this.classList.toggle("click");
             nav.classList.toggle("open");
-        })
+        });
 
-        var typed=new Typed(".input",{
-            strings:["Frontend Developer","UX Designer","Web Developer"],
-            typedSpeed:70,
-            backSpeed:55,
-            loop:true
-        })
-     </script>
+        var typed = new Typed(".input", {
+            strings: [ "UX Designer", "Web Developer","Mobile Application Developer"],
+            typedSpeed: 60,
+            backSpeed: 55,
+            loop: true
+        });
+    </script>
 </body>
 </html>
